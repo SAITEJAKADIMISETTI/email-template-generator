@@ -228,7 +228,7 @@ function updatePreview() {
     const orgEmail = squirrelType === 'med' ? 'support@medsquirrels.com' : 'support@globalsquirrels.com';
     const orgWebsite = squirrelType === 'med' ? 'https://medsquirrels.com' : 'https://globalsquirrels.com';
     const s3Path = squirrelType === 'med' ? 'medsquirrels' : 'globalsquirrels';
-    const footerLogo = squirrelType === 'med' ? 'MS_FOOTER_LOGO.png' : 'GS_FOOTER_LOGO.png';
+    const footerLogo = squirrelType ===  'med' ? 'ms_image_0048.png' : 'gs_image_0044.png';
     const imagePrefix = squirrelType === 'med' ? 'ms_image_' : 'gs_image_';
 
     let contentHTML = '';
