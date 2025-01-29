@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Template Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Form Section -->
+        <div class="form-section">
+            <div
+                style=" padding-bottom: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #e0e0e0;">
+                <h1 class="page-title">Email Template Generator</h1>
+                <button type="button" class="control-button" style="background: #1a237e; color: white;"
+                    onclick="downloadTemplate()" disabled>
+                    Download HTML
+                </button>
+            </div>
+            <form id="templateForm" class="scrollbar-div">
+
+                <div class="form-control">
+                    <label for="squirrelType">Organization Type</label>
+                    <select id="squirrelType" onchange="updatePreview()" required>
+                        <option value="global">Global Squirrels</option>
+                        <option value="med">MedSquirrels</option>
+                    </select>
+                </div>
+
+                <div class="form-control">
+                    <label for="fileName">File Name</label>
+                    <input type="text" id="fileName" required placeholder="Enter File Name">
+                </div>
+
+                <div class="form-control">
+                    <label for="imageName">Image Name (S3)</label>
+                    <input type="text" id="imageName" required oninput="updatePreview()"
+                        placeholder="Enter Image Name in S3">
+                </div>
+
+                <div class="form-control">
+                    <label for="imageWidth">Image Width (px)</label>
+                    <input type="number" id="imageWidth" required oninput="updatePreview()"
+                        placeholder="Enter Image Width">
+                </div>
+
+                <div class="form-control">
+                    <label for="imageHeight">Image Height (px)</label>
+                    <input type="number" id="imageHeight" value="150" required oninput="updatePreview()"
+                        placeholder="Enter Image Height">
+                </div>
+
+                <div id="contentFields"></div>
+
+                <div class="form-control">
+                    <label>Add Content Field</label>
+                    <select id="fieldType">
+                        <option value="text">Text Field</option>
+                        <option value="button">Button</option>
+                    </select>
+                    <div style="margin-top: 8px; display: flex; justify-content: end; align-items: center;">
+                        <button type="button" class="control-button" onclick="addField()"
+                            style="background-color: green; color: white;">Add Field</button>
+                    </div>
+
+                </div>
+
+                <div class="checkbox-group ">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="contactInfo" checked onclick="updatePreview()">
+                        Include Contact Information
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="scheduleMeeting" checked onclick="updatePreview()">
+                        Include Schedule a Meeting
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="includeFooter" checked onclick="updatePreview()">
+                        Include Footer
+                    </label>
+                </div>
+
+
+            </form>
+
+        </div>
+
+        <!-- Preview Section -->
+        <div class="preview-section">
+            <div class="preview-header">
+                <h2>Live Preview</h2>
+                <div class="control-group">
+                    <button onclick="setView('preview')" class="control-button active"
+                        id="previewButton">Preview</button>
+                    <button onclick="setView('code')" class="control-button" id="codeButton">Code</button>
+                    <button onclick="setView('help')" class="control-button" id="helpButton">Help</button>
+                </div>
+            </div>
+
+            <!-- Updated device preview controls -->
+            <div id="previewControls" class="preview-controls control-group">
+                <button onclick="setDevice('desktop')" class="control-button device-button active"
+                    data-device="desktop">Desktop</button>
+                <button onclick="setDevice('mobile-portrait')" class="control-button device-button"
+                    data-device="mobile-portrait">Mobile Portrait</button>
+                <button onclick="setDevice('mobile-landscape')" class="control-button device-button"
+                    data-device="mobile-landscape">Mobile Landscape</button>
+                <button onclick="setDevice('tablet-portrait')" class="control-button device-button"
+                    data-device="tablet-portrait">Tablet Portrait</button>
+                <button onclick="setDevice('tablet-landscape')" class="control-button device-button"
+                    data-device="tablet-landscape">Tablet Landscape</button>
+            </div>
+
+            <div class="preview-container">
+                <div class="preview-wrapper">
+                    <div id="previewMode" class="preview-frame">
+                        <iframe id="previewIframe" class="preview-iframe" scrolling="yes"></iframe>
+                    </div>
+                </div>
+
+                <!-- Code mode remains the same -->
+                <div id="codeMode" class="code-container" style="display: none;">
+                    <button class="copy-button" onclick="copyCode()">Copy Code</button>
+                    <pre id="codePreview" class="code-preview"></pre>
+                </div>
+
+                <div id="helpMode" class="help-section" style="display: none;">
+                    <div class="help-form">
+                        <div>
+                            <label>Variable Name:</label>
+                            <input type="text" id="helpVariableName" placeholder="Enter variable name">
+                        </div>
+
+                        <div class="format-options">
+                            <label class="format-option">
+                                <input type="radio" name="format" value="none" checked> None
+                            </label>
+                            <label class="format-option">
+                                <input type="radio" name="format" value="strong"> Strong
+                            </label>
+                            <label class="format-option">
+                                <input type="radio" name="format" value="underline"> Underline
+                            </label>
+                            <label class="format-option">
+                                <input type="radio" name="format" value="both"> Both
+                            </label>
+                        </div>
+
+                        <div>
+                            <label class="format-option">
+                                <input type="checkbox" id="dynamicValue"> Dynamic Value
+                            </label>
+                        </div>
+
+                        <div class="help-output">
+                            <div> <strong>Output:</strong> <span id="outputText"></span></div>
+                            <button class="help-copy-btn" onclick="copyHelpOutput()">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
