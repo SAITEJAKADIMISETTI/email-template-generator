@@ -333,7 +333,7 @@ a img {
                 <td style="padding: 30px; text-align: center; color: #1f3462;" bgcolor="#ffffff">
                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
             ${contentHTML}
-            ${contactInfo ? `<tr><td style="font-size: 16px; line-height: 2; padding-bottom: 15px;">If you have any questions or need assistance, please don't hesitate to contact us at <a href="mailto:${orgEmail}">${orgEmail}</a></td></tr>` : ''}
+            ${contactInfo ? `<tr><td style="font-size: 16px; line-height: 2; padding-bottom: 15px;">For any questions or support, send an email to <a href="mailto:${orgEmail}">${orgEmail}</a></td></tr>` : ''}
             ${(contactInfo && scheduleMeeting) ? ` <tr>
                             <td style="font-size: 16px; line-height: 2; padding-bottom: 15px;">
                                 or
