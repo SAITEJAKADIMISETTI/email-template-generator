@@ -228,7 +228,8 @@ function updatePreview() {
     const orgEmail = squirrelType === 'med' ? 'support@medsquirrels.com' : 'support@globalsquirrels.com';
     const orgWebsite = squirrelType === 'med' ? 'https://medsquirrels.com' : 'https://globalsquirrels.com';
     const s3Path = squirrelType === 'med' ? 'medsquirrels' : 'globalsquirrels';
-    const footerLogo = squirrelType == 'med' ? 'MS_FOOTER_LOGO.png' : 'GS_FOOTER_LOGO.png';
+    const footerLogo = squirrelType === 'med' ? 'MS_FOOTER_LOGO.png' : 'GS_FOOTER_LOGO.png';
+    const imagePrefix = squirrelType === 'med' ? 'ms_image_' : 'gs_image_';
 
     let contentHTML = '';
 
@@ -324,7 +325,7 @@ a img {
             <tr>
                 <td align="center" bgcolor="#e5f3ff" style="padding-top: 20px; border-radius: 20px 20px 0 0; overflow: hidden;">
                     <a href="javascript:void(0);" style="text-decoration: none; cursor: default !important;" onclick="return false;">
-                        <div style="background-image: url('https://globalmedsquirrels.s3.ap-south-1.amazonaws.com/notification-config/images/${s3Path}/${imageName}.png'); background-size: contain; background-repeat: no-repeat; background-position: center; width: ${imageWidth}px; height: ${imageHeight}px;"></div>
+                        <div style="background-image: url('https://globalmedsquirrels.s3.ap-south-1.amazonaws.com/notification-config/images/${s3Path}/${imagePrefix}${imageName}.png'); background-size: contain; background-repeat: no-repeat; background-position: center; width: ${imageWidth}px; height: ${imageHeight}px;"></div>
                     </a>
                 </td>
             </tr>
