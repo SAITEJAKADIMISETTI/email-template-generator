@@ -50,7 +50,7 @@
                 <div class="form-control">
                     <label for="imageHeight">Image Height (px)</label>
                     <input type="number" id="imageHeight" value="150" required oninput="updatePreview()"
-                        placeholder="Enter Image Height">
+                        placeholder="Enter Image Height" readonly>
                 </div>
 
                 <div id="contentFields"></div>
@@ -65,16 +65,23 @@
                         <button type="button" class="control-button" onclick="addField()"
                             style="background-color: green; color: white;">Add Field</button>
                     </div>
-
                 </div>
 
-                <div class="checkbox-group ">
+                <div class="checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="contactInfo" checked onclick="updatePreview()">
                         Include Contact Information
                     </label>
+                    <div class="form-control" id="preferredEmailContainer" style="display: block;">
+                        <label for="preferredEmail">Preferred Email</label>
+                        <select id="preferredEmail" onchange="updatePreview()">
+                            <option value="support">Support Email</option>
+                            <option value="hiring">Hiring Email</option>
+                        </select>
+                    </div>
                     <label class="checkbox-label">
-                        <input type="checkbox" id="scheduleMeeting" checked onclick="updatePreview()">
+                        <input type="checkbox" id="scheduleMeeting" checked
+                            onclick="togglePreferredEmail(); updatePreview()">
                         Include Schedule a Meeting
                     </label>
                     <label class="checkbox-label">
@@ -85,7 +92,6 @@
 
 
             </form>
-
         </div>
 
         <!-- Preview Section -->
@@ -100,7 +106,7 @@
                 </div>
             </div>
 
-            <!-- Updated device preview controls -->
+            <!-- Device Preview Controls -->
             <div id="previewControls" class="preview-controls control-group">
                 <button onclick="setDevice('desktop')" class="control-button device-button active"
                     data-device="desktop">Desktop</button>
@@ -121,12 +127,13 @@
                     </div>
                 </div>
 
-                <!-- Code mode remains the same -->
+                <!-- Code Mode -->
                 <div id="codeMode" class="code-container" style="display: none;">
                     <button class="copy-button" onclick="copyCode()">Copy Code</button>
                     <pre id="codePreview" class="code-preview"></pre>
                 </div>
 
+                <!-- Help Mode -->
                 <div id="helpMode" class="help-section" style="display: none;">
                     <div class="help-form">
                         <div>
@@ -162,7 +169,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <script src="script.js"></script>

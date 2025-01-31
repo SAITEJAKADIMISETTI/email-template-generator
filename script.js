@@ -2,6 +2,13 @@
 let contentFields = [];
 let currentScale = 1;
 let currentDevice = 'desktop';
+
+function togglePreferredEmail() {
+    const scheduleMeeting = document.getElementById('scheduleMeeting').checked;
+    const preferredEmailContainer = document.getElementById('preferredEmailContainer');
+    preferredEmailContainer.style.display = scheduleMeeting ? 'block' : 'none';
+}
+
 function setView(view) {
     document.getElementById('previewButton').classList.toggle('active', view === 'preview');
     document.getElementById('codeButton').classList.toggle('active', view === 'code');
@@ -162,32 +169,39 @@ function updatePreviewScale() {
 function addField() {
     const fieldType = document.getElementById('fieldType').value;
     const contentFieldsDiv = document.getElementById('contentFields');
-    const fieldId = `field-${Date.now()}`; // Create unique ID for the field
+    const fieldId = `field-${Date.now()}`;
 
     const fieldGroup = document.createElement('div');
     fieldGroup.className = 'field-group';
 
     if (fieldType === 'text') {
         fieldGroup.innerHTML = `
-    <label>Text Content:</label>
-    <textarea class="contentText" oninput="validateForm(); updatePreview();" placeholder="Enter text"></textarea>
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-        <select class="alignmentSelect" style="width: 30%" onchange="updatePreview()">
-            <option value="center">Center</option>
-            <option value="left">Left</option>
-            <option value="right">Right</option>
-        </select>
-        <button type="button" class="remove-btn" onclick="removeField(this)">Remove</button>
-    </div>`;
+            <label>Text Content:</label>
+            <textarea class="contentText" oninput="validateForm(); updatePreview();" placeholder="Enter text"></textarea>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <div style="display: flex; align-items: center; gap : 20px;">
+                 <select class="alignmentSelect"  onchange="updatePreview()">
+                    <option value="center">Center</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+                <select class="textColorSelect"  onchange="updatePreview()">
+                    <option value="default">Default</option>
+                    <option value="red">Red</option>
+                    <option value="green">Green</option>
+                </select>
+                </div>
+                <button type="button" class="remove-btn" onclick="removeField(this)">Remove</button>
+            </div>`;
     } else if (fieldType === 'button') {
         fieldGroup.innerHTML = `
-    <label for="buttonText">Button Text:</label>
-    <input type="text" class="buttonText" oninput="validateForm(); updatePreview();" placeholder="Enter Button Name">
-    <label for="buttonLink">Button Link:</label>
-    <input type="text" class="buttonLink" oninput="validateForm(); updatePreview();" placeholder="Enter Button Link">
-    <div style="display: flex; justify-content: end; align-items: center; margin-top: 10px;">
-        <button type="button" class="remove-btn" onclick="removeField(this)">Remove</button>
-    </div>`;
+            <label for="buttonText">Button Text:</label>
+            <input type="text" class="buttonText" oninput="validateForm(); updatePreview();" placeholder="Enter Button Name">
+            <label for="buttonLink">Button Link:</label>
+            <input type="text" class="buttonLink" oninput="validateForm(); updatePreview();" placeholder="Enter Button Link">
+            <div style="display: flex; justify-content: end; align-items: center; margin-top: 10px;">
+                <button type="button" class="remove-btn" onclick="removeField(this)">Remove</button>
+            </div>`;
     }
 
     contentFieldsDiv.appendChild(fieldGroup);
@@ -215,7 +229,6 @@ function removeField(button) {
 
 function updatePreview() {
     validateForm();
-    const fileName = document.getElementById('fileName').value;
     const imageName = document.getElementById('imageName').value;
     const imageWidth = document.getElementById('imageWidth').value;
     const imageHeight = document.getElementById('imageHeight').value;
@@ -223,12 +236,15 @@ function updatePreview() {
     const scheduleMeeting = document.getElementById('scheduleMeeting').checked;
     const includeFooter = document.getElementById('includeFooter').checked;
     const squirrelType = document.getElementById('squirrelType').value;
+    const preferredEmail = document.getElementById('preferredEmail').value;
 
     const orgName = squirrelType === 'med' ? 'MedSquirrels' : 'Global Squirrels';
-    const orgEmail = squirrelType === 'med' ? 'support@medsquirrels.com' : 'support@globalsquirrels.com';
+    const supportEmail = squirrelType === 'med' ? 'support@medsquirrels.com' : 'support@globalsquirrels.com';
+    const hiringEmail = squirrelType === 'med' ? 'hiring@medsquirrels.com' : 'hiring@globalsquirrels.com';
+    const orgEmail = preferredEmail === 'support' ? supportEmail : hiringEmail;
     const orgWebsite = squirrelType === 'med' ? 'https://medsquirrels.com' : 'https://globalsquirrels.com';
     const s3Path = squirrelType === 'med' ? 'medsquirrels' : 'globalsquirrels';
-    const footerLogo = squirrelType ===  'med' ? 'ms_image_0048.png' : 'gs_image_0044.png';
+    const footerLogo = squirrelType === 'med' ? 'ms_image_0048.png' : 'gs_image_0044.png';
     const imagePrefix = squirrelType === 'med' ? 'ms_image_' : 'gs_image_';
 
     let contentHTML = '';
@@ -239,22 +255,25 @@ function updatePreview() {
             const text = fieldGroup.querySelector('.contentText').value;
             const alignmentSelect = fieldGroup.querySelector('.alignmentSelect');
             const alignment = alignmentSelect ? alignmentSelect.value : 'center';
-            contentHTML += `<tr><td style="font-size: 16px; line-height: 2; padding-bottom: 15px; text-align: ${alignment};">${text}</td></tr>`;
+            const textColorSelect = fieldGroup.querySelector('.textColorSelect');
+            const textColor = textColorSelect ? textColorSelect.value : 'default';
+            const colorStyle = textColor === 'default' ? '' : `color: ${textColor};`;
+            contentHTML += `<tr><td style="font-size: 16px; line-height: 2; padding-bottom: 15px; text-align: ${alignment}; ${colorStyle}">${text}</td></tr>`;
         } else if (fieldGroup.querySelector('.buttonText')) {
             const buttonText = fieldGroup.querySelector('.buttonText').value;
             const buttonLink = fieldGroup.querySelector('.buttonLink').value;
             contentHTML += `
-        <tr>
-            <td align="center" style="padding-bottom: 20px;">
-                <table border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td align="center" style="border-radius: 20px; background-color: #1f3462;">
-                            <a th:href="\${${buttonLink}}"  target="_blank" style="display: inline-block; background-color: #1f3462; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 20px; font-size: 16px;">${buttonText}</a>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>`;
+                <tr>
+                    <td align="center" style="padding-bottom: 20px;">
+                        <table border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="center" style="border-radius: 20px; background-color: #1f3462;">
+                                    <a th:href="\${${buttonLink}}"  target="_blank" style="display: inline-block; background-color: #1f3462; color: #ffffff; padding: 10px 30px; text-decoration: none; border-radius: 20px; font-size: 16px;">${buttonText}</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>`;
         }
     });
 
