@@ -69,10 +69,10 @@
 
                 <div class="checkbox-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" id="contactInfo" checked onclick="updatePreview()">
+                        <input type="checkbox" id="contactInfo" checked onclick="togglePreferredEmail();    updatePreview()">
                         Include Contact Information
                     </label>
-                    <div class="form-control" id="preferredEmailContainer" style="display: block;">
+                    <div class="form-control" id="preferredEmailContainer">
                         <label for="preferredEmail">Preferred Email</label>
                         <select id="preferredEmail" onchange="updatePreview()">
                             <option value="support">Support Email</option>
@@ -81,7 +81,7 @@
                     </div>
                     <label class="checkbox-label">
                         <input type="checkbox" id="scheduleMeeting" checked
-                            onclick="togglePreferredEmail(); updatePreview()">
+                            onclick=" updatePreview()">
                         Include Schedule a Meeting
                     </label>
                     <label class="checkbox-label">

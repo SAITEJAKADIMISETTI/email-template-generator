@@ -4,9 +4,9 @@ let currentScale = 1;
 let currentDevice = 'desktop';
 
 function togglePreferredEmail() {
-    const scheduleMeeting = document.getElementById('scheduleMeeting').checked;
+    const contactInfoCheckbox = document.getElementById('contactInfo');
     const preferredEmailContainer = document.getElementById('preferredEmailContainer');
-    preferredEmailContainer.style.display = scheduleMeeting ? 'block' : 'none';
+    preferredEmailContainer.style.display = contactInfoCheckbox.checked ? 'block' : 'none';
 }
 
 function setView(view) {
@@ -246,6 +246,7 @@ function updatePreview() {
     const s3Path = squirrelType === 'med' ? 'medsquirrels' : 'globalsquirrels';
     const footerLogo = squirrelType === 'med' ? 'ms_image_0048.png' : 'gs_image_0044.png';
     const imagePrefix = squirrelType === 'med' ? 'ms_image_' : 'gs_image_';
+
 
     let contentHTML = '';
 
